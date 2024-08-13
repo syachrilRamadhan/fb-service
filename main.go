@@ -22,7 +22,11 @@ func main() {
 	r.HandleFunc("/logout", authcontroller.Logout).Methods("GET")
 
 	api := r.PathPrefix("/api").Subrouter()
-	api.HandleFunc("/products", productcontroller.Index).Methods("GET")
+	api.HandleFunc("/products", productcontroller.GetProducts).Methods("GET")
+	api.HandleFunc("/product/{id}", productcontroller.GetProductById).Methods("GET")
+	api.HandleFunc("/product", productcontroller.CreateProduct).Methods("POST")
+	api.HandleFunc("/product/{id}", productcontroller.UpdateProduct).Methods("PUT")
+	api.HandleFunc("/product/{id}", productcontroller.DeleteProduct).Methods("DELETE")
 	api.Use(middleware.JWTMiddleware)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
