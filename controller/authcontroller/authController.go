@@ -108,4 +108,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 
+	//delete token
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Path:     "/",
+		Value:    "",
+		HttpOnly: true,
+		MaxAge:   -1,
+	})
+
+	response := map[string]string{"message": "Logout Success"}
+	helper.ResponseJson(w, http.StatusOK, response)
 }
