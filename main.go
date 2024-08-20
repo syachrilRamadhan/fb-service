@@ -3,7 +3,6 @@ package main
 import (
 	authcontroller "fb-service/controller/authcontroller"
 	"fb-service/controller/productcontroller"
-	"fb-service/middleware"
 	"fb-service/models"
 	"log"
 	"net/http"
@@ -27,7 +26,7 @@ func main() {
 	api.HandleFunc("/product", productcontroller.CreateProduct).Methods("POST")
 	api.HandleFunc("/product/{id}", productcontroller.UpdateProduct).Methods("PUT")
 	api.HandleFunc("/product/{id}", productcontroller.DeleteProduct).Methods("DELETE")
-	api.Use(middleware.JWTMiddleware)
+	// api.Use(middleware.JWTMiddleware)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
