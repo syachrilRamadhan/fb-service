@@ -91,22 +91,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// Check if the email in use
-	var emailExists models.User
-	if err := models.DB.Where("email = ?", inputUser.Email).First(&emailExists).Error; err == nil {
-		response := map[string]string{"message": "Email sudah terdatar"}
-		helper.ResponseJson(w, http.StatusConflict, response)
-		return
-	}
-
-	// Check if the username in use
-	var usernameExists models.User
-	if err := models.DB.Where("username = ?", inputUser.Username).First(&usernameExists).Error; err == nil {
-		response := map[string]string{"message": "Username sudah terdaftar"}
-		helper.ResponseJson(w, http.StatusConflict, response)
-		return
-	}
-
 	//hash password
 	hashPassword, _ := bcrypt.GenerateFromPassword([]byte(inputUser.Password), bcrypt.DefaultCost)
 	inputUser.Password = string(hashPassword)

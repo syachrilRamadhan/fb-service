@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -28,5 +29,13 @@ func main() {
 	api.HandleFunc("/product/{id}", productcontroller.DeleteProduct).Methods("DELETE")
 	// api.Use(middleware.JWTMiddleware)
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	corsOptions := handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+	)
+
+	corsHandler := corsOptions(r)
+
+	log.Fatal(http.ListenAndServe(":8080", corsHandler))
 }
