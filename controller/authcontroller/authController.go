@@ -30,7 +30,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err := models.DB.Select("username, password").Where("username = ?", inputUser.Username).First(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
-			response := map[string]string{"message": "Username not found"}
+			response := map[string]string{"message": "Username tidak terdaftar"}
 			helper.ResponseJson(w, http.StatusNotFound, response)
 			return
 		default:
@@ -75,7 +75,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	})
 
-	response := map[string]string{"message": "Login Success"}
+	response := map[string]interface{}{
+		"message": "Login Success",
+		"token":   token,
+	}
 	helper.ResponseJson(w, http.StatusOK, response)
 }
 
