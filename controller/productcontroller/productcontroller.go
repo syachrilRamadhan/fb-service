@@ -13,7 +13,14 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	var products []models.Product
 
-	models.DB.Find(&products)
+	searchQuery := r.URL.Query().Get("search")
+
+	if searchQuery != "" {
+		models.DB.Where("nama_produk LIKE ?", "%"+searchQuery+"%").Find(&products)
+	} else {
+		models.DB.Find(&products)
+	}
+
 	data := map[string]interface{}{
 		"data": products,
 	}
